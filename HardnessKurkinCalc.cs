@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TasksInterface;
-
-
+using TasksInterface.TermalTask;
 
 namespace Hardness_lib
 {
-    public class HardnessKurkinCalc
+    public class HardnessKurkinCalc : IHardnessCalculator
     {
         //var austeniteHard = 150;
         //F = 0,  Ferrite
@@ -19,39 +18,33 @@ namespace Hardness_lib
         //A = 3,  Austenite
         //TB = 4,  Tempered Beinate
         //TM = 5, Tempered Martensite
-        enum ChemElement : int { C,Mn,Mo,Si,Cr,Ni,V,W,Al,Cu};
+        enum ChemElement : int { C, Mn, Mo, Si, Cr, Ni, V, W, Al, Cu };
 
-        public float Calc(int objNumber, DataTable phaseTable, DataTable chemTable, DataTable resultsTable)
+        public float Calc(DataTable phaseTable, DataTable chemTable, List<float> phaseValues)
         {
             var realHard = 0.0f;
-
-            var phases = phaseTable.AsEnumerable().Select(r => r.Field<string>("Фаза"));
-
-            var elNumbers = resultsTable.AsEnumerable().Select(r => r.Field<int>("Индекс")).ToList();
-
-            var objIndex = elNumbers.BinarySearch(objNumber);
-
+            var phasesNames = phaseTable.AsEnumerable().Select(r => r.Field<string>("Фаза"));
+            //var elNumbers = resultsTable.AsEnumerable().Select(r => r.Field<int>("Индекс")).ToList();
+            //var objIndex = elNumbers.BinarySearch(objNumber);
             var chemDic = new Dictionary<string, float>();
 
             foreach (DataRow row in chemTable.Rows)
             {
-                    if(!chemDic.ContainsKey((string)row[0]))
-                        chemDic.Add((string)row[0], (float)row[1]);
+                if (!chemDic.ContainsKey((string)row[0]))
+                    chemDic.Add((string)row[0], (float)row[1]);
             }
-            
+
             var counter = 0;
-            foreach (var phase in phases)
+            foreach (var phaseName in phasesNames)
             {
-                var pureHard = CalcPureHardness(chemDic, phase);
+                var pureHard = CalcPureHardness(chemDic, phaseName);
 
-                var phaseNumber = "p" + (counter + 1).ToString();
-                    var phaseValue = (float)resultsTable.Rows[objIndex][phaseNumber];
-             
-                    realHard += phaseValue * (pureHard/100);                
+                //var phaseNumber = "p" + (counter + 1).ToString();
+                //    var phaseValue = (float)resultsTable.Rows[objIndex][phaseNumber];
 
+                realHard += phaseValues[counter] * (pureHard / 100);
                 counter++;
             }
-
             return realHard;
         }
 
@@ -67,4 +60,5 @@ namespace Hardness_lib
                 return 289 + (792 * (chemValue[ChemElement.C.ToString()])) + (37 * (chemValue[ChemElement.Si.ToString()])) + (15 * (chemValue[ChemElement.W.ToString()])); // чистый Мартенсит
         }
     }
+    
 }
