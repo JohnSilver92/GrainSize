@@ -40,7 +40,7 @@ namespace Hardness_lib
                 var pureHard = CalcPureHardness(chemDic, phaseName);
 
                 //var phaseNumber = "p" + (counter + 1).ToString();
-                //    var phaseValue = (float)resultsTable.Rows[objIndex][phaseNumber];
+                //var phaseValue = (float)resultsTable.Rows[objIndex][phaseNumber];
 
                 realHard += phaseValues[counter] * (pureHard / 100);
                 counter++;
@@ -51,13 +51,13 @@ namespace Hardness_lib
         public float CalcPureHardness(Dictionary<string, float> chemValue, string phaseName)
         {
             if (phaseName == "F" || phaseName == "TB" || phaseName == "TM" || phaseName == "P")
-                return 105 + (310 * (chemValue[ChemElement.C.ToString()])) + (16 * (chemValue[ChemElement.Mn.ToString()])) - (140 * (chemValue[ChemElement.Mo.ToString()])); // чистый Феррит
+                return 105 + (310 * chemValue[ChemElement.C.ToString()]) + (16 * chemValue[ChemElement.Mn.ToString()]) - (140 * chemValue[ChemElement.Mo.ToString()]); // чистый Феррит
             else if (phaseName == "B")
-                return 195 + (136 * (chemValue[ChemElement.C.ToString()])) + (29 * (chemValue[ChemElement.Si.ToString()])) + (35 * (chemValue[ChemElement.Cr.ToString()])) + (29 * (chemValue[ChemElement.Ni.ToString()])) + (132 * (chemValue[ChemElement.V.ToString()])) + (10 * (chemValue[ChemElement.W.ToString()])) + (173 * (chemValue[ChemElement.Al.ToString()])); // чистый Бейнит
+                return 195 + (136 * chemValue[ChemElement.C.ToString()]) + (29 * chemValue[ChemElement.Si.ToString()]) + (35 * chemValue[ChemElement.Cr.ToString()]) + (29 * chemValue[ChemElement.Ni.ToString()]) + (132 * chemValue[ChemElement.V.ToString()]) + (10 * chemValue[ChemElement.W.ToString()]) + (173 * chemValue[ChemElement.Al.ToString()]); // чистый Бейнит
             else if (phaseName == "A")
                 return 150;
             else
-                return 289 + (792 * (chemValue[ChemElement.C.ToString()])) + (37 * (chemValue[ChemElement.Si.ToString()])) + (15 * (chemValue[ChemElement.W.ToString()])); // чистый Мартенсит
+                return 289 + (792 * chemValue[ChemElement.C.ToString()]) + (37 * chemValue[ChemElement.Si.ToString()]) + (15 * chemValue[ChemElement.W.ToString()]); // чистый Мартенсит
         }
     }
     
