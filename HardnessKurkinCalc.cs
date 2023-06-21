@@ -7,7 +7,7 @@ namespace Hardness_lib
 {
     public class HardnessKurkinCalc : IHardnessCalculator
     {
-        //
+        
         //var austeniteHard = 150;
         //F = 0,  Ferrite
         //B = 1,  Beinate
